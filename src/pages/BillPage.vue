@@ -30,10 +30,16 @@
         </v-card>
 
   </v-container>
+
+
+  <v-container>
+    <v-btn @click="getResult">Рассчитать</v-btn>
+  </v-container>
+
   <v-container>
     <v-btn>Рассчитать</v-btn>
-      
   </v-container>
+
 
 </template>
 <script>
@@ -46,7 +52,6 @@ export default {
     setup() {
       const billStore = useBillStore()
       const personStore = usePersonsStore()
-      personStore.persons.forEach(el => console.log(el))
       return{
         billStore, personStore
       }
@@ -54,8 +59,20 @@ export default {
     components:{ Dialog, Select },
     data(){
       return {
-        favorites: [],
-        state: [1,2,3]
+
+      }
+    },
+    methods:{
+      getResult(){
+        const obj = {
+          
+        }
+        this.billStore.items.map(item => {
+          item.favorites.map((favorite => {
+            
+          }
+          ))
+        })
       }
     }
 }

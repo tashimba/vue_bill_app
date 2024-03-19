@@ -7,7 +7,8 @@ export const useBillStore = defineStore('bill', {
             {
               id: 1,
               name: 'Item 1',
-              price: 100
+              price: 100,
+              favorites: []
             },
 
           ],
