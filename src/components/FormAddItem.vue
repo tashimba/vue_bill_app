@@ -11,13 +11,20 @@
           :rules="rules"
           label="Price"
         ></v-text-field>
-        <v-btn class="mt-2" type="submit" block @click="addItem">Добавить</v-btn>
+        <v-btn class="mt-2" type="submit" block @click="handleClick">Добавить</v-btn>
       </v-form>
     </v-sheet>
   </template>
   
 <script>
+import {useBillStore} from "../store/useBillStore.js"
 export default {
+  setup() {
+    const billStore = useBillStore()
+    return{
+      billStore
+    }
+  },
   data: () => ({
     name: '',
     price: '',
@@ -30,8 +37,9 @@ export default {
     ],
   }),
   methods:{
-    addItem(){
-        this.$emit("closeDialog")
+    handleClick(){
+      this.billStore.addItem({name: this.name, price: this.price})
+      this.$emit("closeDialog")
     }
   }
 }

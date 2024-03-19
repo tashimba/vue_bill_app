@@ -1,5 +1,4 @@
 <template>
-  
   <Navigation />
   <RouterView></RouterView>
 </template>
@@ -9,8 +8,8 @@ import PersonList from './components/PersonList.vue/';
 import Navigation from './components/Navigation.vue';
 export default{
   components:{
-    PersonList, Navigation
-  },
+    PersonList, Navigation,
+},
   data: () => ({
   }),
 

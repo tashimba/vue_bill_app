@@ -29,6 +29,11 @@ import FormAddItem from './FormAddItem.vue';
         dialog: false,
       }
     },
+    methods:{
+      handleEmit(obj){
+        this.$emit('addItem',obj )
+      }
+    }
   }
 </script>
 
