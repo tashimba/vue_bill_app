@@ -1,22 +1,25 @@
 <template>
   <v-container style="width: 400px">
-    <h1 style="text-align: center">Долги</h1>
-    <v-list v-if="personStore.persons.find((person) => person.debt)">
-      <v-list-item
-        class="list-item"
-        v-for="person in personStore.persons"
-        :key="person.id"
-        :title="person.name"
-      >
-        <template v-slot:append>
-          <div>{{ person.debt }}</div>
-        </template>
-        <template v-slot:prepend>
-          <div>{{}}</div>
-        </template>
-      </v-list-item>
-    </v-list>
-    <v-btn v-else @click="getResult">Рассчитать</v-btn>
+    
+    <div v-if="personStore.persons.find((person) => person.debts.length)">
+      <!-- <div v-if="personStore.persons.find((person) => person.debt)"> -->
+        <h1 style="text-align: center">Долги</h1>
+      <v-card 
+      style="margin-bottom: 10px;"
+      v-for="person in personStore.persons.filter((person => person.debts.length))"
+      :key="person.id"
+      :title="person.name"
+      :subtitle="'Должен ' + person.debts.map(el => el.owner)"
+      
+      :text="'Сумма: ' + Math.round(person.debts.map(el => el.money)) + ' рубля'"
+      variant="outlined"
+      />
+      <!-- </div> -->
+
+    </div>
+    <!-- <h1 v-else>Долгов нет</h1> -->
+
+    <v-btn v-else  @click="getResult">Рассчитать</v-btn>
   </v-container>
 </template>
 <script>
@@ -37,13 +40,19 @@ export default {
       let count = 0;
       this.billStore.items.map((item) => {
         count = item.favorites.length;
-        item.favorites.map((favorite) => {
+        if (count > 0){
+          item.favorites.map((favorite) => {
           if (item.paying != favorite)
-            this.personStore.addDebt(favorite, item.price / count);
+            this.personStore.addDebt(favorite, item.price / count, item.paying
+             );
         });
         count = 0;
+        }
       });
+      this.billStore.calculated = true
+      // this.personStore.reloadDebts()
     },
+
   },
 };
 </script>

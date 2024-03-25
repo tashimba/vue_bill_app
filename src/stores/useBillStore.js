@@ -8,10 +8,18 @@ export const useBillStore = defineStore("bill", {
           id: 1,
           name: "Item 1",
           price: 100,
-          favorites: [],
-          paying: undefined,
+          favorites: [1,2],
+          paying: 1,
+        },
+        {
+          id: 2,
+          name: "Item 2",
+          price: 100,
+          favorites: [1,2],
+          paying: 2,
         },
       ],
+      calculated: false
     };
   },
 
@@ -23,6 +31,8 @@ export const useBillStore = defineStore("bill", {
         favorites: [],
       };
       this.items.unshift(newItem);
+      this.calculated = false
+
     },
     deleteItem(id) {
       this.items = this.items.filter((el) => el.id !== id);

@@ -4,6 +4,7 @@
     class="select"
     :items="personsStore.persons"
     item-title="name"
+    item-value="id"
     v-model="bill.favorites"
     label="Пользовались"
     multiple
@@ -12,6 +13,7 @@
   <v-select
     :items="personsStore.persons"
     item-title="name"
+    item-value="id"
     v-model="bill.paying"
     label="Заплатил"
     chips
