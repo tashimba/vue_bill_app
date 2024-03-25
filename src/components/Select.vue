@@ -1,33 +1,50 @@
 <template>
-    <v-select
-      v-model="billStore.favorites"
-      :items="personsStore.persons.map(el => el.name)"
-      label="Select"
-      multiple
-      chips
-    ></v-select>
+  <v-select
+    hide-details="auto"
+    class="select"
+    :items="personsStore.persons"
+    item-title="name"
+    v-model="bill.favorites"
+    label="Пользовались"
+    multiple
+    chips
+  ></v-select>
+  <v-select
+    :items="personsStore.persons"
+    item-title="name"
+    v-model="bill.paying"
+    label="Заплатил"
+    chips
+  ></v-select>
 </template>
 
 <script>
-import { useBillStore } from '../store/useBillStore';
-import { usePersonsStore } from '../store/usePersonsStore.js';
+import { useBillStore } from "../stores/useBillStore";
+import { usePersonsStore } from "../stores/usePersonsStore.js";
 
-  export default {
-    setup(){
-        const personsStore = usePersonsStore()
-        const billStore = useBillStore()
-        personsStore.persons.map(el => console.log(el.name))
-        return{
-            personsStore, billStore
-        }
-    },
-    data () {
-      return {
-      }
-    },
-  }
+export default {
+  props: {
+    ItemId: { required: true },
+  },
+  setup(props) {
+    const personsStore = usePersonsStore();
+    const billStore = useBillStore();
+    const bill = billStore.items.find((item) => item.id == props.ItemId);
+    return {
+      personsStore,
+      billStore,
+      bill,
+    };
+  },
+  data() {
+    return {};
+  },
+};
 </script>
 
-<style >
-    
+<style>
+.select {
+  margin: 0;
+  padding: 0;
+}
 </style>
