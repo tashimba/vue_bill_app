@@ -7,7 +7,7 @@ export const useBillStore = defineStore("bill", {
         {
           id: 1,
           name: "Item 1",
-          price: 100,
+          price: 200,
           favorites: [1,2],
           paying: 1,
         },
@@ -17,6 +17,13 @@ export const useBillStore = defineStore("bill", {
           price: 100,
           favorites: [1,2],
           paying: 2,
+        },
+        {
+          id: 3,
+          name: "Item 3",
+          price: 300,
+          favorites: [1,2,3],
+          paying: 3,
         },
       ],
       calculated: false

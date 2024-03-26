@@ -2,22 +2,21 @@
   <v-container style="width: 400px">
     
     <div v-if="personStore.persons.find((person) => person.debts.length)">
-      <!-- <div v-if="personStore.persons.find((person) => person.debt)"> -->
         <h1 style="text-align: center">Долги</h1>
       <v-card 
       style="margin-bottom: 10px;"
       v-for="person in personStore.persons.filter((person => person.debts.length))"
       :key="person.id"
       :title="person.name"
-      :subtitle="'Должен ' + person.debts.map(el => el.owner)"
-      
-      :text="'Сумма: ' + Math.round(person.debts.map(el => el.money)) + ' рубля'"
       variant="outlined"
-      />
-      <!-- </div> -->
-
+      >
+      <template v-slot:text>
+        <div>
+          {{ getDebtOwners(person ) }}
+      </div>
+      </template>
+    </v-card>
     </div>
-    <!-- <h1 v-else>Долгов нет</h1> -->
 
     <v-btn v-else  @click="getResult">Рассчитать</v-btn>
   </v-container>
@@ -34,6 +33,11 @@ export default {
       personStore,
       billStore,
     };
+  },
+  data(){
+    return {
+      debtOwners:[]
+    }
   },
   methods: {
     getResult() {
@@ -52,14 +56,27 @@ export default {
       this.billStore.calculated = true
       // this.personStore.reloadDebts()
     },
-
+    getDebtOwners(person){
+      let debtOwners = [];
+        person.debts.forEach(debt => {
+          this.personStore.persons.forEach(pers => {
+            if (pers.id === debt.owner) {
+              debtOwners.push({ownerName: pers.name, debtOwning: debt.money });
+            }
+          });
+        });
+        return 'Должен:\n' +  debtOwners.map(el => el.ownerName + ' на сумму ' + el.debtOwning ).join(',\n' + "\t")
+      }
   },
 };
 </script>
 <style>
 .list-item {
-  border: 1px solid rgba(0, 0, 0, 0.199);
+  border: 1px solid blanchedalmond;
   border-radius: 10px;
   margin-bottom: 10px;
 }
+div {
+      white-space: pre-line;
+  }
 </style>

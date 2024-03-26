@@ -1,7 +1,7 @@
 <template>
-    <div>
+        <h1 >Список участников</h1>
         <PersonList/>
-    </div>
+    
 </template>
 <script>
 import PersonList from '../components/PersonList.vue/';
@@ -10,6 +10,9 @@ export default {
     
 }
 </script>
-<style>
-    
+<style scoped>
+    h1{
+        text-align: center;
+        margin-bottom: 10px
+    }
 </style>

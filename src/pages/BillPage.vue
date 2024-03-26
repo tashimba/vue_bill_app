@@ -4,6 +4,7 @@
 
     <v-card class="mx-auto" max-width="600">
       <v-list>
+        <transition-group name="list">
         <v-list-group
           v-for="item in billStore.items"
           :key="item.id"
@@ -13,13 +14,17 @@
           <template v-slot:activator="{ props }">
             <v-list-item
               v-bind="props"
+            
               :title="item.name"
               :subtitle="'Цена: ' + item.price + ' рублей'"
-            ></v-list-item>
+            >
+          </v-list-item>
           </template>
 
+          
           <Select :ItemId="item.id" />
         </v-list-group>
+      </transition-group>
       </v-list>
     </v-card>
   </v-container>
@@ -40,9 +45,14 @@ export default {
   },
   components: { Dialog, Select },
   data() {
-    return {};
+    return {addItem: null};
   },
-  methods: {},
+  methods: {
+    deleteItem(){
+      console.log(1)
+      // this.billStore.deleteItem(itemId)
+    }
+  },
 };
 </script>
 <style></style>

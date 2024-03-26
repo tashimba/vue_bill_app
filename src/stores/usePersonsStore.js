@@ -38,34 +38,44 @@ export const usePersonsStore = defineStore("persons", {
       this.persons = this.persons.filter((el) => el.id !== id);
     },
     addDebt(id, money, owner) {
+      const currentPerson = this.persons.find((person) => person.id == id)
+      const currentPersonDebtsOwner =  this.persons.find((person) => person.id == owner)
+
+      //если currentPerson уже должен этому же owner
+      if (currentPerson.debts.some(debt => debt.owner == owner)){
+        currentPerson.debts.map(debt => {
+          if (debt.owner === owner){
+            return debt.money+=money
+          }
+        })
+      }
+     else{
       this.persons.find((person) => person.id == id).debts.push({
         money,  
         owner
       })
+    }
 
-    
+    //если друг другу должны
+    if (currentPersonDebtsOwner.debts.find(debt => debt.owner === id)){
+      currentPersonDebtsOwner.debts.map(debt => {
+        if (debt.owner === id){
+          debt.money-=money
+          if (debt.money === 0){
+            currentPersonDebtsOwner.debts = currentPersonDebtsOwner.debts.filter(el => el.owner !== id)
+          }
+        }
+      })      
+      currentPerson.debts.map(debt => {
+        if (debt.owner === currentPersonDebtsOwner.id) {
+          debt.money-=money
+          if (debt.money === 0){
+            currentPerson.debts = currentPerson.debts.filter(el => el.owner !== currentPersonDebtsOwner.id)
+          }
+        }
+      })  
+    }
+
     },
-    // reloadDebts(){
-    //   this.persons.map(person => {
-        
-        
-
-    //     const owner = this.persons.find(el => el.debt?.owner == person.id)
-    //     if (owner){
-    //       if (owner.debt.owner == person.id){
-    //         owner.debt.money = owner.debt.money - person.debt.money
-    //         owner.debt = {
-    //           money: this.money - person.debt.money,
-    //           owner:
-    //         }
-    //         person.debt.money = person.debt.money - owner.debt.money  
-    //       }
-    //     }
-        
-    //   })
-    
-    // this.calculated = true
-      
-    // }
   },
 });
