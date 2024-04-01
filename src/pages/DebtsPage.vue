@@ -4,7 +4,7 @@
     <v-card
       class="mx-auto"
       max-width="500"
-      style="margin-bottom: 10p; padding: 0 10px"
+      style="margin-bottom: 10px; padding: 0 10px"
       v-for="person in personStore.persons.filter(
         (person) => person.debts.length
       )"
@@ -50,9 +50,9 @@ export default {
       this.personStore.persons.map((el) => (el.debts = []));
       let count = 0;
       this.billStore.items.map((item) => {
-        count = item.favorites.length;
+        count = item.using.length;
         if (count > 0) {
-          item.favorites.map((favorite) => {
+          item.using.map((favorite) => {
             if (item.paying != favorite)
               this.personStore.addDebt(
                 favorite,
@@ -74,12 +74,9 @@ export default {
           }
         });
       });
-      return (
-        // "Должен:\n" +
-        debtOwners
-          .map((el) => el.ownerName + " на сумму " + el.debtOwning + " рублей")
-          .join(",\n" + "\t")
-      );
+      return debtOwners
+        .map((el) => el.ownerName + " на сумму " + el.debtOwning + " рублей")
+        .join(",\n" + "\t");
     },
   },
 };

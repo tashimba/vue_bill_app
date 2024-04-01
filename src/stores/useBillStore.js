@@ -4,29 +4,7 @@ import { usePersonsStore } from "./usePersonsStore";
 export const useBillStore = defineStore("bill", {
   state: () => {
     return {
-      items: [
-        {
-          id: 1,
-          name: "Item 1",
-          price: 200,
-          favorites: [],
-          paying: 1,
-        },
-        {
-          id: 2,
-          name: "Item 2",
-          price: 100,
-          favorites: [],
-          paying: 2,
-        },
-        {
-          id: 3,
-          name: "Item 3",
-          price: 300,
-          favorites: [],
-          paying: 3,
-        },
-      ],
+      items: [],
     };
   },
 
@@ -35,7 +13,7 @@ export const useBillStore = defineStore("bill", {
       const newItem = {
         ...obj,
         id: Date.now(),
-        favorites: [],
+        using: [],
         paying: null,
       };
       this.items.unshift(newItem);
@@ -61,9 +39,9 @@ export const useBillStore = defineStore("bill", {
       personsStore.deleteDebts();
       let count = 0;
       this.items.map((item) => {
-        count = item.favorites.length;
+        count = item.using.length;
         if (count > 0) {
-          item.favorites.map((favorite) => {
+          item.using.map((favorite) => {
             if (item.paying != favorite)
               personsStore.addDebt(
                 favorite,
@@ -73,6 +51,14 @@ export const useBillStore = defineStore("bill", {
           });
           count = 0;
         }
+      });
+    },
+
+    deletePersonFromUsing(id) {
+      this.items.forEach((item) => {
+        item.using = item.using.filter((el) => el != id);
+        item.paying = item.paying == id ? null : item.paying;
+        this.getResult();
       });
     },
   },

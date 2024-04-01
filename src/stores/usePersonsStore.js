@@ -1,25 +1,10 @@
 import { defineStore } from "pinia";
+import { useBillStore } from "./useBillStore";
 
 export const usePersonsStore = defineStore("persons", {
   state: () => {
     return {
-      persons: [
-        {
-          name: "Person 1",
-          id: 1,
-          debts: [],
-        },
-        {
-          name: "Person 2",
-          id: 2,
-          debts: [],
-        },
-        {
-          name: "Person 3",
-          id: 3,
-          debts: [],
-        },
-      ],
+      persons: [],
     };
   },
 
@@ -28,12 +13,27 @@ export const usePersonsStore = defineStore("persons", {
       const newPerson = {
         name: name,
         id: Date.now(),
-        debts: [],
+        debts: [{ money: null, owner: null }],
       };
       this.persons.unshift(newPerson);
     },
     deletePerson(id) {
+      const billStore = useBillStore();
       this.persons = this.persons.filter((el) => el.id !== id);
+      this.persons = this.persons.map((person) => {
+        const updatedDebts = person.debts.map((debt) => {
+          console.log(debt.owner === id, id, debt.owner);
+
+          if (debt.owner === id) {
+            console.log(debt);
+
+            return { money: null, owner: nulll };
+          }
+          return debt;
+        });
+        return { ...person, debts: updatedDebts };
+      });
+      billStore.deletePersonFromUsing(id);
     },
     deleteDebts() {
       this.persons.forEach((el) => (el.debts = []));
@@ -44,8 +44,6 @@ export const usePersonsStore = defineStore("persons", {
       const currentPersonDebtsOwner = this.persons.find(
         (person) => person.id == owner
       );
-
-      console.log(id, money, owner);
 
       //если currentPerson уже должен этому же owner
       if (currentPerson.debts.some((debt) => debt.owner == owner)) {

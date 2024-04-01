@@ -20,6 +20,7 @@
   >
     Добавить позицию
   </v-btn>
+
   <v-dialog v-model="openState" width="auto">
     <v-card
       max-width="600"
@@ -44,8 +45,7 @@ export default {
       openState: false,
     };
   },
-  methods: {},
 };
 </script>
 
-<style lang=""></style>
+<style></style>

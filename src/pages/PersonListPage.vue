@@ -1,4 +1,6 @@
 <template>
+  <h1>Список участников</h1>
+
   <v-card class="mx-auto" max-width="500">
     <v-list>
       <transition-group name="list">
@@ -23,7 +25,7 @@
 
 <script>
 import { usePersonsStore } from "../stores/usePersonsStore.js";
-import InputPerson from "./InputPerson.vue";
+import InputPerson from "../components/InputPerson.vue";
 export default {
   components: {
     InputPerson,
@@ -36,7 +38,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .list-enter-active {
   transition: all 0.3s ease;
 }

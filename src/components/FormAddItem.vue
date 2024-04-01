@@ -3,17 +3,18 @@
     <v-form @submit.prevent>
       <v-text-field
         :error-messages="errorMessagesName"
-        v-model="inputName"
+        v-model.trim="inputName"
         label="Name"
         @click:clear="inputName = ''"
         clearable
       ></v-text-field>
       <v-text-field
         :error-messages="errorMessagesPrice"
-        v-model="inputPrice"
+        v-model.trim="inputPrice"
         label="Price"
         @click:clear="inputPrice = ''"
         clearable
+        suffix="рублей"
       ></v-text-field>
       <v-btn class="mt-2" type="submit" block @click="handleClick">
         {{ !!data ? "Применить изменения" : "Добавить позицию" }}
@@ -61,14 +62,14 @@ export default {
       }
     },
     checkInputValues() {
-      if (!this.inputName) {
+      if (!this.inputName.length) {
         this.errorMessagesName = "Необходимо ввести имя";
       }
-      if (!this.inputPrice) {
+      if (!this.inputPrice.length) {
         this.errorMessagesPrice = "Необходимо ввести цену";
       }
-      if (this.inputName.length > 10) {
-        this.errorMessagesName = "Длина имени не должна превышать 10 букв";
+      if (this.inputName.length > 20) {
+        this.errorMessagesName = "Длина имени не должна превышать 20 букв";
       }
       if (!this.data) {
         if (this.billStore.items.find((item) => item.name == this.inputName)) {
@@ -77,15 +78,17 @@ export default {
       }
       if (!Number(this.inputPrice)) {
         this.errorMessagesPrice = "Цена должна быть числом";
+      } else if (!this.inputName.match(/[a-zA-Zа-яёА-ЯЁ ]/)) {
+        this.errorMessagesName = "Имя должно содержать буквы";
       } else return true;
     },
-    watch: {
-      inputName() {
-        this.errorMessagesName = "";
-      },
-      inputPrice() {
-        this.errorMessagesPrice = "";
-      },
+  },
+  watch: {
+    inputName() {
+      this.errorMessagesName = "";
+    },
+    inputPrice() {
+      this.errorMessagesPrice = "";
     },
   },
 };

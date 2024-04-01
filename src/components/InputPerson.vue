@@ -1,7 +1,7 @@
 <template>
-  <v-responsive class="mx-auto" max-width="500" style="margin: 15px 0">
+  <v-responsive class="mx-auto" max-width="500" style="margin: 25px 0">
     <v-text-field
-      v-model="inputValue"
+      v-model.trim="inputValue"
       :error-messages="errorMessages"
       label="Добавить участника"
       append-inner-icon="mdi-plus"
@@ -23,6 +23,11 @@ export default {
       store,
     };
   },
+  props: {
+    personId: {
+      type: String,
+    },
+  },
   data: () => ({
     inputValue: "",
     errorMessages: "",
@@ -35,14 +40,16 @@ export default {
       }
     },
     checkName() {
-      if (!this.inputValue) {
+      if (!this.inputValue.length) {
         this.errorMessages = "Необходимо ввести имя";
-      } else if (this.inputValue.length > 10) {
-        this.errorMessages = "Длина имени не должна превышать 10 букв";
+      } else if (this.inputValue.length > 20) {
+        this.errorMessages = "Длина имени не должна превышать 20 букв";
       } else if (
         this.store.persons.find((person) => person.name == this.inputValue)
       ) {
         this.errorMessages = "Участник с таким именем уже создан";
+      } else if (!this.inputValue.match(/[a-zA-Zа-яёА-ЯЁ ]/)) {
+        this.errorMessages = "Имя должно содержать буквы";
       } else return true;
     },
   },

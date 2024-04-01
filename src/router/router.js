@@ -1,12 +1,12 @@
-import { createMemoryHistory, createRouter } from "vue-router";
-import PersonsPage from "../pages/PersonsPage.vue";
+import { createWebHistory, createRouter } from "vue-router";
+import PersonListPage from "../pages/PersonListPage.vue";
 import BillPage from "../pages/BillPage.vue";
 import DebtsPage from "../pages/DebtsPage.vue";
 
 const routes = [
   {
     path: "/",
-    component: PersonsPage,
+    component: PersonListPage,
   },
   {
     path: "/bill",
@@ -20,7 +20,7 @@ const routes = [
 
 const router = createRouter({
   routes,
-  history: createMemoryHistory(),
+  history: createWebHistory(),
 });
 
 export default router;

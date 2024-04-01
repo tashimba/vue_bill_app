@@ -19,8 +19,7 @@
           </template>
 
           <div class="btns-container">
-            <Dialog :item="item" />
-
+            <Dialog :item="item"></Dialog>
             <v-btn
               density="compact"
               class="btn"
@@ -32,14 +31,14 @@
             </v-btn>
           </div>
 
-          <Select :ItemId="item.id" />
+          <Select :ItemId="item.id"></Select>
         </v-list-group>
       </transition-group>
     </v-list>
   </v-card>
 
   <div class="text-center pa-4">
-    <Dialog />
+    <Dialog></Dialog>
   </div>
 </template>
 <script>

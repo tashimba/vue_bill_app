@@ -5,7 +5,7 @@
     :items="personsStore.persons"
     item-title="name"
     item-value="id"
-    v-model="bill.favorites"
+    v-model="bill.using"
     label="Пользовались"
     multiple
     chips
@@ -35,7 +35,7 @@ export default {
     const bill = billStore.items.find((item) => item.id == props.ItemId);
 
     watch(bill, () => {
-      if (bill.favorites.length && bill.paying) {
+      if (bill.using.length && bill.paying) {
         billStore.getResult();
       }
     });
@@ -44,9 +44,6 @@ export default {
       personsStore,
       bill,
     };
-  },
-  data() {
-    return {};
   },
 };
 </script>
