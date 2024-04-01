@@ -1,9 +1,4 @@
-import {
-  createMemoryHistory,
-  createRouter,
-  createWebHashHistory,
-} from "vue-router";
-import Main from "../pages/Main.vue";
+import { createMemoryHistory, createRouter } from "vue-router";
 import PersonsPage from "../pages/PersonsPage.vue";
 import BillPage from "../pages/BillPage.vue";
 import DebtsPage from "../pages/DebtsPage.vue";
@@ -11,10 +6,6 @@ import DebtsPage from "../pages/DebtsPage.vue";
 const routes = [
   {
     path: "/",
-    component: Main,
-  },
-  {
-    path: "/persons",
     component: PersonsPage,
   },
   {

@@ -1,10 +1,8 @@
 <template>
-  <v-container>
-    <Dialog @addItem="addItem" />
-
-    <v-card class="mx-auto" max-width="600">
-      <v-list>
-        <transition-group name="list">
+  <h1>Счет</h1>
+  <v-card class="mx-auto" max-width="500">
+    <v-list>
+      <transition-group name="list">
         <v-list-group
           v-for="item in billStore.items"
           :key="item.id"
@@ -14,20 +12,35 @@
           <template v-slot:activator="{ props }">
             <v-list-item
               v-bind="props"
-            
               :title="item.name"
               :subtitle="'Цена: ' + item.price + ' рублей'"
             >
-          </v-list-item>
+            </v-list-item>
           </template>
 
-          
+          <div class="btns-container">
+            <Dialog :item="item" />
+
+            <v-btn
+              density="compact"
+              class="btn"
+              variant="outlined"
+              prepend-icon="mdi-delete"
+              @click="deleteItem(item.id)"
+            >
+              Удалить
+            </v-btn>
+          </div>
+
           <Select :ItemId="item.id" />
         </v-list-group>
       </transition-group>
-      </v-list>
-    </v-card>
-  </v-container>
+    </v-list>
+  </v-card>
+
+  <div class="text-center pa-4">
+    <Dialog />
+  </div>
 </template>
 <script>
 import Dialog from "../components/Dialog.vue";
@@ -45,14 +58,25 @@ export default {
   },
   components: { Dialog, Select },
   data() {
-    return {addItem: null};
+    return {
+      openDialog: false,
+    };
   },
   methods: {
-    deleteItem(){
-      console.log(1)
-      // this.billStore.deleteItem(itemId)
-    }
+    deleteItem(itemId) {
+      this.billStore.deleteItem(itemId);
+    },
   },
 };
 </script>
-<style></style>
+<style scoped>
+.btns-container {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10px;
+  margin: 5px 15px;
+}
+.btn {
+  min-width: 50%;
+}
+</style>

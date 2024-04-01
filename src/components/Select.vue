@@ -23,6 +23,7 @@
 <script>
 import { useBillStore } from "../stores/useBillStore";
 import { usePersonsStore } from "../stores/usePersonsStore.js";
+import { watch } from "vue";
 
 export default {
   props: {
@@ -32,9 +33,15 @@ export default {
     const personsStore = usePersonsStore();
     const billStore = useBillStore();
     const bill = billStore.items.find((item) => item.id == props.ItemId);
+
+    watch(bill, () => {
+      if (bill.favorites.length && bill.paying) {
+        billStore.getResult();
+      }
+    });
+
     return {
       personsStore,
-      billStore,
       bill,
     };
   },
