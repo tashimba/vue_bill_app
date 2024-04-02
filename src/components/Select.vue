@@ -27,7 +27,7 @@ import { watch } from "vue";
 
 export default {
   props: {
-    ItemId: { required: true },
+    ItemId: { type: Number, required: true },
   },
   setup(props) {
     const personsStore = usePersonsStore();

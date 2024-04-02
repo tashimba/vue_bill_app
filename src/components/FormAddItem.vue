@@ -14,7 +14,7 @@
         label="Price"
         @click:clear="inputPrice = ''"
         clearable
-        suffix="рублей"
+        suffix="рубли"
       ></v-text-field>
       <v-btn class="mt-2" type="submit" block @click="handleClick">
         {{ !!data ? "Применить изменения" : "Добавить позицию" }}
@@ -27,7 +27,7 @@
 import { useBillStore } from "../stores/useBillStore.js";
 export default {
   props: {
-    data: {},
+    data: { type: Object },
   },
   setup() {
     const billStore = useBillStore();
@@ -64,22 +64,28 @@ export default {
     checkInputValues() {
       if (!this.inputName.length) {
         this.errorMessagesName = "Необходимо ввести имя";
+        return false;
       }
       if (!this.inputPrice.length) {
         this.errorMessagesPrice = "Необходимо ввести цену";
+        return false;
       }
       if (this.inputName.length > 20) {
         this.errorMessagesName = "Длина имени не должна превышать 20 букв";
+        return false;
       }
       if (!this.data) {
         if (this.billStore.items.find((item) => item.name == this.inputName)) {
           this.errorMessagesName = "Продукт с таким именем уже создан";
+          return false;
         }
       }
       if (!Number(this.inputPrice)) {
         this.errorMessagesPrice = "Цена должна быть числом";
+        return false;
       } else if (!this.inputName.match(/[a-zA-Zа-яёА-ЯЁ ]/)) {
         this.errorMessagesName = "Имя должно содержать буквы";
+        return false;
       } else return true;
     },
   },

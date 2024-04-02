@@ -41,30 +41,10 @@ export default {
   data() {
     return {
       debtOwners: [],
-      calculated: false,
     };
   },
 
   methods: {
-    getResult() {
-      this.personStore.persons.map((el) => (el.debts = []));
-      let count = 0;
-      this.billStore.items.map((item) => {
-        count = item.using.length;
-        if (count > 0) {
-          item.using.map((favorite) => {
-            if (item.paying != favorite)
-              this.personStore.addDebt(
-                favorite,
-                item.price / count,
-                item.paying
-              );
-          });
-          count = 0;
-        }
-      });
-    },
-
     getDebtOwners(person) {
       let debtOwners = [];
       person.debts.forEach((debt) => {

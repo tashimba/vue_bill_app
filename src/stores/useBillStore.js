@@ -42,7 +42,7 @@ export const useBillStore = defineStore("bill", {
         count = item.using.length;
         if (count > 0) {
           item.using.map((favorite) => {
-            if (item.paying != favorite)
+            if (item.paying && item.paying != favorite)
               personsStore.addDebt(
                 favorite,
                 Math.ceil(item.price / count),
@@ -58,7 +58,6 @@ export const useBillStore = defineStore("bill", {
       this.items.forEach((item) => {
         item.using = item.using.filter((el) => el != id);
         item.paying = item.paying == id ? null : item.paying;
-        this.getResult();
       });
     },
   },

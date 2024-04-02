@@ -13,7 +13,13 @@
             <v-list-item
               v-bind="props"
               :title="item.name"
-              :subtitle="'Цена: ' + item.price + ' рублей'"
+              :subtitle="`Цена: ${item.price} ${
+                item.price % 10 == 1
+                  ? 'рубль'
+                  : item.price % 10 >= 2 && item.price % 10 <= 4
+                  ? 'рубля'
+                  : 'рублей'
+              }`"
             >
             </v-list-item>
           </template>
@@ -56,11 +62,7 @@ export default {
     };
   },
   components: { Dialog, Select },
-  data() {
-    return {
-      openDialog: false,
-    };
-  },
+
   methods: {
     deleteItem(itemId) {
       this.billStore.deleteItem(itemId);

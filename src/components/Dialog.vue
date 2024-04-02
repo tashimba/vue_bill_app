@@ -38,7 +38,7 @@ export default {
     FormAddItem,
   },
   props: {
-    item: {},
+    item: { type: Object },
   },
   data() {
     return {

@@ -13,27 +13,21 @@ export const usePersonsStore = defineStore("persons", {
       const newPerson = {
         name: name,
         id: Date.now(),
-        debts: [{ money: null, owner: null }],
+        debts: [],
       };
       this.persons.unshift(newPerson);
     },
     deletePerson(id) {
       const billStore = useBillStore();
       this.persons = this.persons.filter((el) => el.id !== id);
-      this.persons = this.persons.map((person) => {
-        const updatedDebts = person.debts.map((debt) => {
-          console.log(debt.owner === id, id, debt.owner);
 
-          if (debt.owner === id) {
-            console.log(debt);
+      this.persons.map(
+        (person) =>
+          (person.debts = person.debts.filter((debt) => debt.owner !== id))
+      );
 
-            return { money: null, owner: nulll };
-          }
-          return debt;
-        });
-        return { ...person, debts: updatedDebts };
-      });
       billStore.deletePersonFromUsing(id);
+      billStore.getResult();
     },
     deleteDebts() {
       this.persons.forEach((el) => (el.debts = []));

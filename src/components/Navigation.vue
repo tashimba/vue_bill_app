@@ -10,7 +10,14 @@
 
 <script>
 export default {
-  data: () => ({ value: 0 }),
+  data() {
+    return { value: Number(sessionStorage.getItem("navigationValue")) || 0 };
+  },
+  watch: {
+    value(val) {
+      sessionStorage.setItem("navigationValue", val);
+    },
+  },
 };
 </script>
 
