@@ -1,13 +1,12 @@
 <template>
   <h1>Список участников</h1>
-
   <v-card class="mx-auto" max-width="500">
-    <v-list>
+    <v-list class="py-0">
       <transition-group name="list">
         <v-list-item
-          v-for="person in store.persons"
+          v-for="(person, i) in store.persons"
+          :style="i != 0 && 'border-top: 1px solid rgba(0, 0, 0, 0.2)'"
           :key="person.id"
-          :value="person"
           :title="person.name"
         >
           <template v-slot:append>
@@ -27,6 +26,7 @@
 import { usePersonsStore } from "../stores/usePersonsStore.js";
 import InputPerson from "../components/InputPerson.vue";
 export default {
+  name: "PersonListPage",
   components: {
     InputPerson,
   },

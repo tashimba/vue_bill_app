@@ -1,41 +1,55 @@
 <template>
   <h1>Счет</h1>
   <v-card class="mx-auto" max-width="500">
-    <v-list>
+    <v-list class="py-0">
       <transition-group name="list">
         <v-list-group
-          v-for="item in billStore.items"
+          v-for="(item, i) in billStore.items"
           :key="item.id"
           :value="item"
-          :title="item.name"
         >
           <template v-slot:activator="{ props }">
             <v-list-item
               v-bind="props"
-              :title="item.name"
-              :subtitle="`Цена: ${item.price} ${
-                item.price % 10 == 1
-                  ? 'рубль'
-                  : item.price % 10 >= 2 && item.price % 10 <= 4
-                  ? 'рубля'
-                  : 'рублей'
-              }`"
+              :style="i != 0 && 'border-top: 1px solid rgba(0, 0, 0, 0.2)'"
             >
+              <v-card
+                class="py-0"
+                variant="text"
+                :title="item.name"
+                :subtitle="`Цена: ${item.price} ${
+                  item.price % 10 == 1
+                    ? 'рубль'
+                    : item.price % 10 >= 2 && item.price % 10 <= 4
+                    ? 'рубля'
+                    : 'рублей'
+                }`"
+              >
+                <template v-slot:append>
+                  <div class="btns-container">
+                    <v-btn
+                      v-if="!!item"
+                      density="compact"
+                      class="btn"
+                      variant="outlined"
+                      @click.stop="openDialog = true"
+                    >
+                      <v-icon icon="mdi-pencil"></v-icon>
+                    </v-btn>
+                    <Dialog :item="item" :openDialog="openDialog"></Dialog>
+                    <v-btn
+                      density="compact"
+                      class="btn"
+                      variant="outlined"
+                      @click.stop="deleteItem(item.id)"
+                    >
+                      <v-icon icon="mdi-delete"></v-icon>
+                    </v-btn>
+                  </div>
+                </template>
+              </v-card>
             </v-list-item>
           </template>
-
-          <div class="btns-container">
-            <Dialog :item="item"></Dialog>
-            <v-btn
-              density="compact"
-              class="btn"
-              variant="outlined"
-              prepend-icon="mdi-delete"
-              @click="deleteItem(item.id)"
-            >
-              Удалить
-            </v-btn>
-          </div>
 
           <Select :ItemId="item.id"></Select>
         </v-list-group>
@@ -47,37 +61,25 @@
     <Dialog></Dialog>
   </div>
 </template>
-<script>
+<script setup>
 import Dialog from "../components/Dialog.vue";
 import Select from "../components/Select.vue";
 import { useBillStore } from "../stores/useBillStore.js";
-import { usePersonsStore } from "../stores/usePersonsStore.js";
-export default {
-  setup() {
-    const billStore = useBillStore();
-    const personStore = usePersonsStore();
-    return {
-      billStore,
-      personStore,
-    };
-  },
-  components: { Dialog, Select },
+import { ref } from "vue";
 
-  methods: {
-    deleteItem(itemId) {
-      this.billStore.deleteItem(itemId);
-    },
-  },
+const billStore = useBillStore();
+const openDialog = ref(false);
+
+const deleteItem = (itemId) => {
+  this.billStore.deleteItem(itemId);
 };
 </script>
 <style scoped>
 .btns-container {
   display: flex;
-  justify-content: space-evenly;
   gap: 10px;
-  margin: 5px 15px;
 }
 .btn {
-  min-width: 50%;
+  /* min-width: 50%; */
 }
 </style>

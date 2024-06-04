@@ -4,12 +4,16 @@
       v-model.trim="inputValue"
       :error-messages="errorMessages"
       label="Добавить участника"
-      append-inner-icon="mdi-plus"
       clear-icon="mdi-close-circle"
       @click:append-inner="addPerson"
       @click:clear="inputValue = ''"
       clearable
     >
+      <template v-slot:append-inner>
+        <v-btn variant="elevated" size="30px">
+          <v-icon icon="mdi-plus" @click="addPerson"> </v-icon>
+        </v-btn>
+      </template>
     </v-text-field>
   </v-responsive>
 </template>
