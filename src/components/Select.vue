@@ -2,50 +2,42 @@
   <v-select
     hide-details="auto"
     class="select"
+    v-model="bill.using"
     :items="personsStore.persons"
     item-title="name"
     item-value="id"
-    v-model="bill.using"
     label="Пользовались"
     multiple
     chips
   ></v-select>
   <v-select
+    v-model="bill.paying"
     :items="personsStore.persons"
     item-title="name"
     item-value="id"
-    v-model="bill.paying"
     label="Заплатил"
     chips
   ></v-select>
 </template>
 
-<script>
+<script setup>
 import { useBillStore } from "../stores/useBillStore";
 import { usePersonsStore } from "../stores/usePersonsStore.js";
 import { watch } from "vue";
 
-export default {
-  props: {
-    ItemId: { type: Number, required: true },
-  },
-  setup(props) {
-    const personsStore = usePersonsStore();
-    const billStore = useBillStore();
-    const bill = billStore.items.find((item) => item.id == props.ItemId);
+const props = defineProps({
+  ItemId: { type: Number, required: true, default: null },
+});
 
-    watch(bill, () => {
-      if (bill.using.length && bill.paying) {
-        billStore.getResult();
-      }
-    });
+const personsStore = usePersonsStore();
+const billStore = useBillStore();
+const bill = billStore.items.find((item) => item.id == props.ItemId);
 
-    return {
-      personsStore,
-      bill,
-    };
-  },
-};
+watch(bill, () => {
+  if (bill.using.length && bill.paying) {
+    billStore.getResult();
+  }
+});
 </script>
 
 <style>

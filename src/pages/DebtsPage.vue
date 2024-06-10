@@ -24,41 +24,28 @@
   <h1 v-else>Долгов нет</h1>
 </template>
 
-<script>
+<script setup>
 import { useBillStore } from "../stores/useBillStore";
 import { usePersonsStore } from "../stores/usePersonsStore";
+import { ref } from "vue";
 
-export default {
-  setup() {
-    const personStore = usePersonsStore();
-    const billStore = useBillStore();
+const personStore = usePersonsStore();
+const billStore = useBillStore();
 
-    return {
-      personStore,
-      billStore,
-    };
-  },
-  data() {
-    return {
-      debtOwners: [],
-    };
-  },
+// const debtOwners = ref([]);
 
-  methods: {
-    getDebtOwners(person) {
-      let debtOwners = [];
-      person.debts.forEach((debt) => {
-        this.personStore.persons.forEach((pers) => {
-          if (pers.id === debt.owner) {
-            debtOwners.push({ ownerName: pers.name, debtOwning: debt.money });
-          }
-        });
-      });
-      return debtOwners
-        .map((el) => el.ownerName + " на сумму " + el.debtOwning + " рублей")
-        .join(",\n" + "\t");
-    },
-  },
+const getDebtOwners = (person) => {
+  let debtOwners = [];
+  person.debts.forEach((debt) => {
+    personStore.persons.forEach((pers) => {
+      if (pers.id === debt.owner) {
+        debtOwners.push({ ownerName: pers.name, debtOwning: debt.money });
+      }
+    });
+  });
+  return debtOwners
+    .map((el) => el.ownerName + " на сумму " + el.debtOwning + " рублей")
+    .join(",\n" + "\t");
 };
 </script>
 

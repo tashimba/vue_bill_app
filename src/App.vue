@@ -3,13 +3,8 @@
   <RouterView></RouterView>
 </template>
 
-<script>
+<script setup>
 import Navigation from "./components/Navigation.vue";
-export default {
-  components: {
-    Navigation,
-  },
-};
 </script>
 
 <style>

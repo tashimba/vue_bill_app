@@ -1,34 +1,23 @@
 <template>
-  <v-btn
-    v-if="!item"
-    width="500"
-    size="large"
-    variant="tonal"
-    elevation="2"
-    @click="openState = true"
-  >
-    Добавить позицию
-  </v-btn>
-
   <v-dialog activator="parent" width="auto">
     <template v-slot:default="{ isActive }">
       <v-card
         max-width="600"
-        :title="item ? 'Изменение позиции' : 'Добавление позиции'"
+        :title="props.item ? 'Изменение позиции' : 'Добавление позиции'"
       >
         <template v-slot:actions>
           <v-sheet class="mx-auto" width="400" style="padding: 20px">
             <v-form @submit.prevent>
               <v-text-field
-                :error-messages="errorMessagesName"
                 v-model.trim="inputName"
+                :error-messages="errorMessagesName"
                 label="Название"
                 @click:clear="inputName = ''"
                 clearable
               ></v-text-field>
               <v-text-field
-                :error-messages="errorMessagesPrice"
                 v-model.trim="inputPrice"
+                :error-messages="errorMessagesPrice"
                 label="Цена"
                 @click:clear="inputPrice = ''"
                 clearable
@@ -38,9 +27,10 @@
                 class="mt-2"
                 type="submit"
                 block
-                @click="() => handleClick(item)"
+                variant="tonal"
+                @click="() => handleClick(isActive)"
               >
-                {{ !!data ? "Применить изменения" : "Добавить позицию" }}
+                {{ !!props.item ? "Применить изменения" : "Добавить позицию" }}
               </v-btn>
             </v-form>
           </v-sheet>
@@ -51,68 +41,78 @@
 </template>
 
 <script setup>
-import FormAddItem from "./FormAddItem.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useBillStore } from "../stores/useBillStore.js";
+
 const props = defineProps({
-  openDialog: { type: Boolean },
-  item: { type: Object },
+  item: { type: Object, default: null },
 });
 
 const openState = ref(false);
 
-import { useBillStore } from "../stores/useBillStore.js";
-
 const billStore = useBillStore();
 
-const inputName = this.data ? this.data.name : "";
-const inputPrice = this.data ? this.data.price : "";
-const errorMessagesName = "";
-const errorMessagesPrice = "";
+const { changeItem, addItem } = billStore;
 
-const handleClick = (data) => {
-  if (checkInputValues(data)) {
-    if (!!data) {
-      this.billStore.changeItem({
-        id: data.id,
-        name: inputName,
-        price: inputPrice,
+const inputName = ref(props.item?.name ?? "");
+const inputPrice = ref(props.item?.price ?? "");
+const errorMessagesName = ref("");
+const errorMessagesPrice = ref("");
+
+const handleClick = (isActive) => {
+  if (checkInputValues(props.item)) {
+    if (!!props.item) {
+      changeItem({
+        id: props.item.id,
+        name: inputName.value,
+        price: inputPrice.value,
       });
     } else {
-      billStore.addItem({
-        name: inputName,
-        price: inputPrice,
+      addItem({
+        name: inputName.value,
+        price: inputPrice.value,
       });
+      inputName.value = "";
+      inputPrice.value = "";
     }
+    isActive.value = false;
   }
 };
 
-const checkInputValues = (data) => {
-  if (!inputName.length) {
-    errorMessagesName = "Необходимо ввести имя";
+const checkInputValues = () => {
+  if (!inputName.value.length) {
+    errorMessagesName.value = "Необходимо ввести имя";
     return false;
   }
-  if (!inputPrice.length) {
-    errorMessagesPrice = "Необходимо ввести цену";
+  if (!inputPrice.value.length) {
+    errorMessagesPrice.value = "Необходимо ввести цену";
     return false;
   }
-  if (inputName.length > 20) {
-    errorMessagesName = "Длина имени не должна превышать 20 букв";
+  if (inputName.value.length > 20) {
+    errorMessagesName.value = "Длина имени не должна превышать 20 букв";
     return false;
   }
-  if (!data) {
-    if (billStore.items.find((item) => item.name == inputName)) {
-      errorMessagesName = "Продукт с таким именем уже создан";
+  if (!props.item) {
+    if (billStore.items.find((item) => item.name == inputName.value)) {
+      errorMessagesName.value = "Продукт с таким именем уже создан";
       return false;
     }
   }
-  if (!Number(inputPrice)) {
-    errorMessagesPrice = "Цена должна быть числом";
+  if (!Number(inputPrice.value)) {
+    errorMessagesPrice.value = "Цена должна быть числом";
     return false;
-  } else if (!inputName.match(/[a-zA-Zа-яёА-ЯЁ ]/)) {
-    errorMessagesName = "Имя должно содержать буквы";
+  } else if (!inputName.value.match(/[a-zA-Zа-яёА-ЯЁ ]/)) {
+    errorMessagesName.value = "Имя должно содержать буквы";
     return false;
   } else return true;
 };
+
+watch(inputName, () => {
+  errorMessagesName.value = "";
+});
+watch(inputPrice, () => {
+  errorMessagesPrice.value = "";
+});
 </script>
 
 <style></style>

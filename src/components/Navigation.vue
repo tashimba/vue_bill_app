@@ -1,23 +1,48 @@
 <template>
-  <v-layout class="overflow-visible" style="height: 30px">
-    <v-bottom-navigation v-model="value" color="teal" horizontal mandatory>
-      <v-btn @click="$router.push('/')"> Участники </v-btn>
-      <v-btn @click="$router.push('/bill')"> Счет </v-btn>
-      <v-btn @click="$router.push('/debts')"> Долги </v-btn>
-    </v-bottom-navigation>
-  </v-layout>
+  <v-card
+    class="d-flex justify-center w-100"
+    style="height: 50px"
+    elevation="0"
+  >
+    <v-btn
+      v-for="(route, i) in routes"
+      :key="i"
+      @click="handleClick(route, i)"
+      :color="navValue == i ? 'primary' : ''"
+      :variant="navValue == i ? 'tonal' : 'text'"
+      class="h-100"
+      rounded="0"
+      :text="route.name"
+    >
+    </v-btn>
+  </v-card>
+  <v-divider class="mb-5" />
 </template>
 
-<script>
-export default {
-  data() {
-    return { value: Number(sessionStorage.getItem("navigationValue")) || 0 };
+<script setup>
+import { ref } from "vue";
+import router from "../router/router.js";
+const routes = [
+  {
+    name: "Участники",
+    path: "/",
   },
-  watch: {
-    value(val) {
-      sessionStorage.setItem("navigationValue", val);
-    },
+  {
+    name: "Счет",
+    path: "/bill",
   },
+  {
+    name: "Долги",
+    path: "/debts",
+  },
+];
+
+const navValue = ref(Number(sessionStorage.getItem("navigationValue")) || 0);
+
+const handleClick = (route, i) => {
+  navValue.value = routes.indexOf(route, i);
+  router.push(route.path);
+  sessionStorage.setItem("navigationValue", navValue.value);
 };
 </script>
 

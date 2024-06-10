@@ -26,20 +26,18 @@
                 }`"
               >
                 <template v-slot:append>
-                  <div class="btns-container">
+                  <div class="d-flex ga-5">
                     <v-btn
                       v-if="!!item"
-                      density="compact"
-                      class="btn"
+                      density="comfortable"
                       variant="outlined"
-                      @click.stop="openDialog = true"
                     >
                       <v-icon icon="mdi-pencil"></v-icon>
+                      <Dialog :item="item"></Dialog>
                     </v-btn>
-                    <Dialog :item="item" :openDialog="openDialog"></Dialog>
+
                     <v-btn
-                      density="compact"
-                      class="btn"
+                      density="comfortable"
                       variant="outlined"
                       @click.stop="deleteItem(item.id)"
                     >
@@ -58,28 +56,29 @@
   </v-card>
 
   <div class="text-center pa-4">
-    <Dialog></Dialog>
+    <v-btn
+      width="500"
+      size="large"
+      variant="tonal"
+      elevation="2"
+      @click="openState = true"
+      text=""
+    >
+      Добавить позицию
+      <Dialog></Dialog>
+    </v-btn>
   </div>
 </template>
+
 <script setup>
 import Dialog from "../components/Dialog.vue";
 import Select from "../components/Select.vue";
 import { useBillStore } from "../stores/useBillStore.js";
-import { ref } from "vue";
 
 const billStore = useBillStore();
-const openDialog = ref(false);
 
 const deleteItem = (itemId) => {
-  this.billStore.deleteItem(itemId);
+  billStore.deleteItem(itemId);
 };
 </script>
-<style scoped>
-.btns-container {
-  display: flex;
-  gap: 10px;
-}
-.btn {
-  /* min-width: 50%; */
-}
-</style>
+<style scoped></style>
