@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100">
+  <div class="h-100 test">
     <h1>Список участников</h1>
     <v-card class="mx-auto" max-width="500">
       <v-list class="py-0">
@@ -81,28 +81,26 @@ watch(inputValue, () => {
   errorMessages.value = "";
 });
 </script>
-<style scoped>
-.list-enter-active {
-  transition: all 0.3s ease;
-}
-.list-leave-active {
-  transition: all 0.3s ease;
-}
-.list-enter-from {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-.addIcon {
-  cursor: pointer;
-  padding: 5px;
-}
-.addIcon:hover {
-  transition: 0.1s ease-in;
-  border: 1px solid;
-  border-radius: 5px;
+
+<style scoped lang="scss">
+.list {
+  &-enter {
+    &-active {
+      transition: all 0.3s ease;
+    }
+    &-from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+  }
+  &-leave {
+    &-active {
+      transition: all 0.3s ease;
+    }
+    &-to {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+  }
 }
 </style>

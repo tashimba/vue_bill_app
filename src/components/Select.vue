@@ -1,7 +1,6 @@
 <template>
   <v-select
     hide-details="auto"
-    class="select"
     v-model="bill.using"
     :items="personsStore.persons"
     item-title="name"
@@ -40,9 +39,4 @@ watch(bill, () => {
 });
 </script>
 
-<style>
-.select {
-  margin: 0;
-  padding: 0;
-}
-</style>
+<style></style>

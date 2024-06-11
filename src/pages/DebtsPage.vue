@@ -25,14 +25,9 @@
 </template>
 
 <script setup>
-import { useBillStore } from "../stores/useBillStore";
 import { usePersonsStore } from "../stores/usePersonsStore";
-import { ref } from "vue";
 
 const personStore = usePersonsStore();
-const billStore = useBillStore();
-
-// const debtOwners = ref([]);
 
 const getDebtOwners = (person) => {
   let debtOwners = [];
