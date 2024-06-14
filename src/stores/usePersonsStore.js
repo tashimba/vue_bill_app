@@ -85,6 +85,9 @@ export const usePersonsStore = defineStore("persons", {
   },
 
   getters: {
+    getPersons: (state) => () => {
+      return state.persons;
+    },
     hasAnyDebts: (state) => () => {
       return state.persons.find((person) => person.debts.length);
     },

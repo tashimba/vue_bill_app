@@ -4,7 +4,7 @@
     <v-list class="py-0">
       <transition-group name="list">
         <v-list-group
-          v-for="(item, i) in billItems"
+          v-for="(item, i) in getBills()"
           :key="item.id"
           :value="item"
         >
@@ -17,7 +17,7 @@
                 class="py-0"
                 variant="text"
                 :title="item.name"
-                :subtitle="getItemPriceString(item)"
+                :subtitle="`Цена: ${getStringPrice(item.price)}`"
               >
                 <template v-slot:append>
                   <div class="d-flex ga-5">
@@ -27,7 +27,7 @@
                       variant="outlined"
                     >
                       <v-icon icon="mdi-pencil"></v-icon>
-                      <Dialog :item="item"/>
+                      <Dialog :item="item" />
                     </v-btn>
 
                     <v-btn
@@ -43,7 +43,7 @@
             </v-list-item>
           </template>
 
-          <Select :ItemId="item.id"/>
+          <Select :ItemId="item.id" />
         </v-list-group>
       </transition-group>
     </v-list>
@@ -67,16 +67,8 @@
 import Dialog from "../components/Dialog.vue";
 import Select from "../components/Select.vue";
 import { useBillStore } from "../stores/useBillStore.js";
+import { getStringPrice } from "../functions/getStringPrice";
 
-const { deleteItem, items: billItems } = useBillStore();
-const getItemPriceString = (item) => {
-  return `Цена: ${item.price} ${
-    item.price % 10 == 1
-      ? "рубль"
-      : item.price % 10 >= 2 && item.price % 10 <= 4
-      ? "рубля"
-      : "рублей"
-  }`;
-};
+const { deleteItem, getBills } = useBillStore();
 </script>
-<style scoped></style>
+<style lang="scss"></style>

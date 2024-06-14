@@ -43,11 +43,7 @@ export const useBillStore = defineStore("bill", {
         if (count > 0) {
           item.using.map((favorite) => {
             if (item.paying && item.paying != favorite)
-              personsStore.addDebt(
-                favorite,
-                Math.ceil(item.price / count),
-                item.paying
-              );
+              personsStore.addDebt(favorite, item.price / count, item.paying);
           });
           count = 0;
         }
@@ -59,6 +55,24 @@ export const useBillStore = defineStore("bill", {
         item.using = item.using.filter((el) => el != id);
         item.paying = item.paying == id ? null : item.paying;
       });
+    },
+  },
+
+  getters: {
+    getBills: (state) => () => {
+      return state.items;
+    },
+    hasAnySpending: (state) => () => {
+      return state.items.find((item) => item.paying && item.using.length);
+    },
+    getSumByPerson: (state) => (personId) => {
+      let sum = 0;
+      state.items.forEach((item) => {
+        if (item.using.includes(personId)) {
+          sum += item.price / item.using.length;
+        }
+      });
+      return sum;
     },
   },
 });

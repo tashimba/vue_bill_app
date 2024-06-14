@@ -1,7 +1,7 @@
 <template>
   <v-select
     v-model="bill.using"
-    :items="persons"
+    :items="getPersons()"
     hide-details="auto"
     item-title="name"
     item-value="id"
@@ -11,7 +11,7 @@
   ></v-select>
   <v-select
     v-model="bill.paying"
-    :items="persons"
+    :items="getPersons()"
     item-title="name"
     item-value="id"
     label="Заплатил"
@@ -28,7 +28,7 @@ const props = defineProps({
   ItemId: { type: Number, required: true, default: null },
 });
 
-const { persons } = usePersonsStore();
+const { getPersons } = usePersonsStore();
 const { items: billItems, getResult } = useBillStore();
 
 const bill = billItems.find((item) => item.id == props.ItemId);

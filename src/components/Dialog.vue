@@ -51,7 +51,7 @@ const props = defineProps({
   item: { type: Object, default: null },
 });
 
-const { items: billItems, changeItem, addItem } = useBillStore();
+const { getBills, changeItem, addItem } = useBillStore();
 
 const inputName = ref(props.item?.name ?? "");
 const inputPrice = ref(props.item?.price ?? "");
@@ -92,7 +92,7 @@ const checkInputValues = () => {
     return false;
   }
   if (!props.item) {
-    if (billItems.find((item) => item.name == inputName.value)) {
+    if (getBills().find((item) => item.name == inputName.value)) {
       errorMessagesName.value = "Продукт с таким именем уже создан";
       return false;
     }
