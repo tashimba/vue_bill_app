@@ -6,21 +6,24 @@
         :title="props.item ? 'Изменение позиции' : 'Добавление позиции'"
       >
         <template v-slot:actions>
-          <v-sheet class="mx-auto" width="400" style="padding: 20px">
+          <v-sheet 
+            class="mx-auto" 
+            width="400" 
+            style="padding: 20px">
             <v-form @submit.prevent>
               <v-text-field
                 v-model.trim="inputName"
                 :error-messages="errorMessagesName"
-                label="Название"
-                @click:clear="inputName = ''"
                 clearable
+                @click:clear="inputName = ''"
+                label="Название"
               ></v-text-field>
               <v-text-field
                 v-model.trim="inputPrice"
                 :error-messages="errorMessagesPrice"
-                label="Цена"
-                @click:clear="inputPrice = ''"
                 clearable
+                @click:clear="inputPrice = ''"
+                label="Цена"
                 suffix="рубли"
               ></v-text-field>
               <v-btn
@@ -48,11 +51,7 @@ const props = defineProps({
   item: { type: Object, default: null },
 });
 
-const openState = ref(false);
-
-const billStore = useBillStore();
-
-const { changeItem, addItem } = billStore;
+const { items: billItems, changeItem, addItem } = useBillStore();
 
 const inputName = ref(props.item?.name ?? "");
 const inputPrice = ref(props.item?.price ?? "");
@@ -93,7 +92,7 @@ const checkInputValues = () => {
     return false;
   }
   if (!props.item) {
-    if (billStore.items.find((item) => item.name == inputName.value)) {
+    if (billItems.find((item) => item.name == inputName.value)) {
       errorMessagesName.value = "Продукт с таким именем уже создан";
       return false;
     }

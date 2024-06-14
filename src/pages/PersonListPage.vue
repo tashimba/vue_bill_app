@@ -5,12 +5,12 @@
       <v-list class="py-0">
         <transition-group name="list">
           <v-list-item
-            v-for="(person, i) in personStore.persons"
-            :style="i != 0 && 'border-top: 1px solid rgba(0, 0, 0, 0.2)'"
+            v-for="(person, i) in persons"
             :key="person.id"
+            :style="i != 0 && 'border-top: 1px solid rgba(0, 0, 0, 0.2)'"
             :title="person.name"
           >
-            <template v-slot:append>
+            <template #append>
               <v-icon
                 icon="mdi-close"
                 @click="deletePerson(person.id)"
@@ -21,15 +21,18 @@
       </v-list>
     </v-card>
 
-    <v-responsive class="mx-auto" max-width="500" style="margin: 25px 0">
+    <v-responsive 
+      class="mx-auto" 
+      max-width="500" 
+      style="margin: 25px 0">
       <v-text-field
         v-model.trim="inputValue"
         :error-messages="errorMessages"
-        label="Добавить участника"
         clear-icon="mdi-close-circle"
+        clearable
         @click:append-inner="createPerson"
         @click:clear="inputValue = ''"
-        clearable
+        label="Добавить участника"
       >
         <template v-slot:append-inner>
           <v-btn variant="elevated" size="30px" @click="createPerson">
@@ -45,9 +48,7 @@
 import { usePersonsStore } from "../stores/usePersonsStore.js";
 import { ref, watch } from "vue";
 
-const personStore = usePersonsStore();
-
-const { addPerson, deletePerson } = personStore;
+const { addPerson, deletePerson, persons } = usePersonsStore();
 
 const props = defineProps({
   personId: {
@@ -69,9 +70,7 @@ const checkName = () => {
     errorMessages.value = "Необходимо ввести имя";
   } else if (inputValue.value.length > 20) {
     errorMessages.value = "Длина имени не должна превышать 20 букв";
-  } else if (
-    personStore.persons.find((person) => person.name == inputValue.value)
-  ) {
+  } else if (persons.find((person) => person.name == inputValue.value)) {
     errorMessages.value = "Участник с таким именем уже создан";
   } else if (!inputValue.value.match(/[a-zA-Zа-яёА-ЯЁ ]/)) {
     errorMessages.value = "Имя должно содержать буквы";

@@ -1,20 +1,17 @@
 <template>
-  <div v-if="personStore.persons.find((person) => person.debts.length)">
+  <div v-if="hasAnyDebts()">
     <h1 style="text-align: center">Долги</h1>
     <v-card
-      class="mx-auto"
-      max-width="500"
-      style="margin-bottom: 10px; padding: 0 10px"
-      v-for="person in personStore.persons.filter(
-        (person) => person.debts.length
-      )"
+      v-for="person in getPersonsWithDebts()"
       :key="person.id"
       :title="person.name"
       elevation="6"
+      class="mx-auto"
+      max-width="500"
+      style="margin-bottom: 10px; padding: 0 10px"
     >
-      <template v-slot:subtitle> Должен: </template>
-
-      <template v-slot:text>
+      <template #subtitle> Должен: </template>
+      <template #text>
         <div>
           {{ getDebtOwners(person) }}
         </div>
@@ -27,12 +24,12 @@
 <script setup>
 import { usePersonsStore } from "../stores/usePersonsStore";
 
-const personStore = usePersonsStore();
+const { persons, hasAnyDebts, getPersonsWithDebts } = usePersonsStore();
 
 const getDebtOwners = (person) => {
   let debtOwners = [];
   person.debts.forEach((debt) => {
-    personStore.persons.forEach((pers) => {
+    persons.forEach((pers) => {
       if (pers.id === debt.owner) {
         debtOwners.push({ ownerName: pers.name, debtOwning: debt.money });
       }

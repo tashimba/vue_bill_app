@@ -7,11 +7,11 @@
     <v-btn
       v-for="(route, i) in routes"
       :key="i"
-      @click="handleClick(route, i)"
       :color="navValue == i ? 'primary' : ''"
       :variant="navValue == i ? 'tonal' : 'text'"
       class="h-100"
       rounded="0"
+      @click="handleClick(route, i)"
       :text="route.name"
     >
     </v-btn>

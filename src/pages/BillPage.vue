@@ -4,7 +4,7 @@
     <v-list class="py-0">
       <transition-group name="list">
         <v-list-group
-          v-for="(item, i) in billStore.items"
+          v-for="(item, i) in billItems"
           :key="item.id"
           :value="item"
         >
@@ -17,13 +17,7 @@
                 class="py-0"
                 variant="text"
                 :title="item.name"
-                :subtitle="`Цена: ${item.price} ${
-                  item.price % 10 == 1
-                    ? 'рубль'
-                    : item.price % 10 >= 2 && item.price % 10 <= 4
-                    ? 'рубля'
-                    : 'рублей'
-                }`"
+                :subtitle="getItemPriceString(item)"
               >
                 <template v-slot:append>
                   <div class="d-flex ga-5">
@@ -33,7 +27,7 @@
                       variant="outlined"
                     >
                       <v-icon icon="mdi-pencil"></v-icon>
-                      <Dialog :item="item"></Dialog>
+                      <Dialog :item="item"/>
                     </v-btn>
 
                     <v-btn
@@ -49,7 +43,7 @@
             </v-list-item>
           </template>
 
-          <Select :ItemId="item.id"></Select>
+          <Select :ItemId="item.id"/>
         </v-list-group>
       </transition-group>
     </v-list>
@@ -62,7 +56,6 @@
       variant="tonal"
       elevation="2"
       @click="openState = true"
-      text=""
     >
       Добавить позицию
       <Dialog></Dialog>
@@ -75,10 +68,15 @@ import Dialog from "../components/Dialog.vue";
 import Select from "../components/Select.vue";
 import { useBillStore } from "../stores/useBillStore.js";
 
-const billStore = useBillStore();
-
-const deleteItem = (itemId) => {
-  billStore.deleteItem(itemId);
+const { deleteItem, items: billItems } = useBillStore();
+const getItemPriceString = (item) => {
+  return `Цена: ${item.price} ${
+    item.price % 10 == 1
+      ? "рубль"
+      : item.price % 10 >= 2 && item.price % 10 <= 4
+      ? "рубля"
+      : "рублей"
+  }`;
 };
 </script>
 <style scoped></style>

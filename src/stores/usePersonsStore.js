@@ -83,4 +83,13 @@ export const usePersonsStore = defineStore("persons", {
       }
     },
   },
+
+  getters: {
+    hasAnyDebts: (state) => () => {
+      return state.persons.find((person) => person.debts.length);
+    },
+    getPersonsWithDebts: (state) => () => {
+      return state.persons.filter((person) => person.debts.length);
+    },
+  },
 });
