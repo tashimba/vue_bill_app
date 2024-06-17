@@ -29,10 +29,10 @@
         v-model.trim="inputValue"
         :error-messages="errorMessages"
         clear-icon="mdi-close-circle"
+        label="Добавить участника"
         clearable
         @click:append-inner="createPerson"
         @click:clear="inputValue = ''"
-        label="Добавить участника"
       >
         <template v-slot:append-inner>
           <v-btn 

@@ -5,9 +5,9 @@
         <div>
           <h1>Траты</h1>
           <v-card
-            v-for="person in getPersons()"
-            :key="person.id"
-            :title="person.name"
+            v-for="spending in getSpendingsArray()"
+            :key="spending.personId"
+            :title="getPersonName(spending.personId)"
             elevation="6"
             class="mx-auto"
             max-width="500"
@@ -17,7 +17,7 @@
 
             <template #text>
               <div>
-                {{ getStringSumByPerson(person.id) }}
+                {{ getStringPrice(spending.price) }}
               </div>
             </template>
           </v-card>
@@ -55,9 +55,8 @@ import { usePersonsStore } from "../stores/usePersonsStore";
 import { useBillStore } from "../stores/useBillStore";
 import { getStringPrice } from "../functions/getStringPrice";
 
-const { getPersons, hasAnyDebts, getPersonsWithDebts } = usePersonsStore();
-
-const { getBills, hasAnySpending } = useBillStore();
+const { getPersons, hasAnyDebts, getPersonsWithDebts, getPersonName } = usePersonsStore();
+const { hasAnySpending, getSpendingsArray } = useBillStore();
 
 const getDebtOwners = (person) => {
   let debtOwners = [];
@@ -73,15 +72,6 @@ const getDebtOwners = (person) => {
     .join(",\n" + "\t");
 };
 
-const getStringSumByPerson = (personId) => {
-  let sum = 0;
-  getBills().forEach((item) => {
-    if (item.using.includes(personId)) {
-      sum += item.price / item.using.length;
-    }
-  });
-  return `${getStringPrice(sum ?? 0)} `;
-};
 </script>
 
 <style>

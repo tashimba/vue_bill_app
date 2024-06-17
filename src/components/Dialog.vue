@@ -14,17 +14,17 @@
               <v-text-field
                 v-model.trim="inputName"
                 :error-messages="errorMessagesName"
+                label="Название"
                 clearable
                 @click:clear="inputName = ''"
-                label="Название"
               ></v-text-field>
               <v-text-field
                 v-model.trim="inputPrice"
                 :error-messages="errorMessagesPrice"
-                clearable
-                @click:clear="inputPrice = ''"
                 label="Цена"
                 suffix="рубли"
+                clearable
+                @click:clear="inputPrice = ''"
               ></v-text-field>
               <v-btn
                 class="mt-2"

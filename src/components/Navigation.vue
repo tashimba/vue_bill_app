@@ -9,10 +9,10 @@
       :key="i"
       :color="navValue == i ? 'primary' : ''"
       :variant="navValue == i ? 'tonal' : 'text'"
+      :text="route.name"
       class="h-100"
       rounded="0"
       @click="handleClick(route, i)"
-      :text="route.name"
     >
     </v-btn>
   </v-card>

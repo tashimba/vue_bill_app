@@ -16,7 +16,7 @@ export const useBillStore = defineStore("bill", {
         using: [],
         paying: null,
       };
-      this.items.unshift(newItem);
+      this.items.push(newItem);
     },
 
     deleteItem(id) {
@@ -65,14 +65,18 @@ export const useBillStore = defineStore("bill", {
     hasAnySpending: (state) => () => {
       return state.items.find((item) => item.paying && item.using.length);
     },
-    getSumByPerson: (state) => (personId) => {
-      let sum = 0;
+    getSpendingsArray: (state) => () => {
+      const spendingsArray = [];
       state.items.forEach((item) => {
-        if (item.using.includes(personId)) {
-          sum += item.price / item.using.length;
+        const existingSendingOwner = spendingsArray.find((el) => el.personId == item.paying)
+        if (existingSendingOwner) {
+          existingSendingOwner.price += Number(item.price)
         }
-      });
-      return sum;
+        else{
+          spendingsArray.push({personId: item.paying, price: Number(item.price)});
+        }
+      })
+      return spendingsArray
     },
   },
 });

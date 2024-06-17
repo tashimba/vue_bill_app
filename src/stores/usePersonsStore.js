@@ -15,7 +15,7 @@ export const usePersonsStore = defineStore("persons", {
         id: Date.now(),
         debts: [],
       };
-      this.persons.unshift(newPerson);
+      this.persons.push(newPerson);
     },
     deletePerson(id) {
       const billStore = useBillStore();
@@ -93,6 +93,9 @@ export const usePersonsStore = defineStore("persons", {
     },
     getPersonsWithDebts: (state) => () => {
       return state.persons.filter((person) => person.debts.length);
+    },
+    getPersonName: (state) => (id) => {
+      return state.persons.find((person) => person.id == id).name;
     },
   },
 });
