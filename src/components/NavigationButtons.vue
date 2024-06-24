@@ -7,8 +7,8 @@
     <v-btn
       v-for="(route, i) in routes"
       :key="i"
-      :color="navValue == i ? 'primary' : ''"
-      :variant="navValue == i ? 'tonal' : 'text'"
+      :color="navValue === i ? 'primary' : ''"
+      :variant="navValue === i ? 'tonal' : 'text'"
       :text="route.name"
       class="h-100"
       rounded="0"
@@ -25,23 +25,23 @@ import router from "../router/router.js";
 const routes = [
   {
     name: "Участники",
-    path: "/",
+    namePath: "home",
   },
   {
     name: "Счет",
-    path: "/bill",
+    namePath: "bill",
   },
   {
     name: "Долги",
-    path: "/debts",
+    namePath: "debts",
   },
 ];
 
-const navValue = ref(Number(sessionStorage.getItem("navigationValue")) || 0);
+const navValue = ref(+sessionStorage.getItem("navigationValue") || 0);
 
 const handleClick = (route, i) => {
   navValue.value = routes.indexOf(route, i);
-  router.push(route.path);
+  router.push({ name: route.namePath });
   sessionStorage.setItem("navigationValue", navValue.value);
 };
 </script>

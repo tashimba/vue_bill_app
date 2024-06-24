@@ -1,13 +1,13 @@
 <template>
   <v-container>
-    <v-row v-if="hasAnySpending()">
+    <v-row v-if="billStore.hasAnySpending()">
       <v-col>
-        <div>
+        <div class="">
           <h1>Траты</h1>
           <v-card
-            v-for="spending in getSpendingsArray()"
+            v-for="spending in billStore.getSpendingsArray()"
             :key="spending.personId"
-            :title="getPersonName(spending.personId)"
+            :title="personsStore.getPersonName(spending.personId)"
             elevation="6"
             class="mx-auto"
             max-width="500"
@@ -24,10 +24,10 @@
         </div>
       </v-col>
       <v-col>
-        <div v-if="hasAnyDebts()">
+        <div v-if="personsStore.hasAnyDebts()">
           <h1 style="text-align: center">Долги</h1>
           <v-card
-            v-for="person in getPersonsWithDebts()"
+            v-for="person in personsStore.getPersonsWithDebts()"
             :key="person.id"
             :title="person.name"
             elevation="6"
@@ -55,13 +55,13 @@ import { usePersonsStore } from "../stores/usePersonsStore";
 import { useBillStore } from "../stores/useBillStore";
 import { getStringPrice } from "../functions/getStringPrice";
 
-const { getPersons, hasAnyDebts, getPersonsWithDebts, getPersonName } = usePersonsStore();
-const { hasAnySpending, getSpendingsArray } = useBillStore();
+const personsStore = usePersonsStore();
+const billStore = useBillStore();
 
 const getDebtOwners = (person) => {
   let debtOwners = [];
   person.debts.forEach((debt) => {
-    getPersons().forEach((pers) => {
+    personsStore.persons.forEach((pers) => {
       if (pers.id === debt.owner) {
         debtOwners.push({ ownerName: pers.name, debtOwning: debt.money });
       }
@@ -71,11 +71,6 @@ const getDebtOwners = (person) => {
     .map((el) => el.ownerName + " на сумму " + getStringPrice(el.debtOwning))
     .join(",\n" + "\t");
 };
-
 </script>
 
-<style>
-div {
-  white-space: pre-line;
-}
-</style>
+<style></style>

@@ -26,7 +26,7 @@ export const useBillStore = defineStore("bill", {
 
     changeItem(data) {
       this.items = this.items.map((item) => {
-        if (item.id == data.id) {
+        if (item.id === data.id) {
           item.name = data.name;
           item.price = data.price;
         }
@@ -53,27 +53,24 @@ export const useBillStore = defineStore("bill", {
     deletePersonFromUsing(id) {
       this.items.forEach((item) => {
         item.using = item.using.filter((el) => el != id);
-        item.paying = item.paying == id ? null : item.paying;
+        item.paying = item.paying === id ? null : item.paying;
       });
     },
   },
 
   getters: {
-    getBills: (state) => () => {
-      return state.items;
-    },
     hasAnySpending: (state) => () => {
       return state.items.find((item) => item.paying && item.using.length);
     },
     getSpendingsArray: (state) => () => {
       const spendingsArray = [];
       state.items.forEach((item) => {
-        const existingSendingOwner = spendingsArray.find((el) => el.personId == item.paying)
+        const existingSendingOwner = spendingsArray.find((el) => el.personId === item.paying)
         if (existingSendingOwner) {
-          existingSendingOwner.price += Number(item.price)
+          existingSendingOwner.price += +item.price
         }
         else{
-          spendingsArray.push({personId: item.paying, price: Number(item.price)});
+          spendingsArray.push({personId: item.paying, price: +item.price});
         }
       })
       return spendingsArray

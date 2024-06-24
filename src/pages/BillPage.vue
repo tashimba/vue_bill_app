@@ -4,7 +4,7 @@
     <v-list class="py-0">
       <transition-group name="list">
         <v-list-group
-          v-for="(item, i) in getBills()"
+          v-for="(item, i) in billStore.items"
           :key="item.id"
           :value="item"
         >
@@ -27,13 +27,13 @@
                       variant="outlined"
                     >
                       <v-icon icon="mdi-pencil"></v-icon>
-                      <Dialog :item="item" />
+                      <BaseDialog :item="item" />
                     </v-btn>
 
                     <v-btn
                       density="comfortable"
                       variant="outlined"
-                      @click.stop="deleteItem(item.id)"
+                      @click.stop="billStore.deleteItem(item.id)"
                     >
                       <v-icon icon="mdi-delete"></v-icon>
                     </v-btn>
@@ -43,7 +43,7 @@
             </v-list-item>
           </template>
 
-          <Select :ItemId="item.id" />
+          <SelectPersons :ItemId="item.id" />
         </v-list-group>
       </transition-group>
     </v-list>
@@ -58,17 +58,17 @@
       @click="openState = true"
     >
       Добавить позицию
-      <Dialog></Dialog>
+      <BaseDialog></BaseDialog>
     </v-btn>
   </div>
 </template>
 
 <script setup>
-import Dialog from "../components/Dialog.vue";
-import Select from "../components/Select.vue";
+import BaseDialog from "../components/BaseDialog.vue";
+import SelectPersons from "../components/SelectPersons.vue";
 import { useBillStore } from "../stores/useBillStore.js";
 import { getStringPrice } from "../functions/getStringPrice";
 
-const { deleteItem, getBills } = useBillStore();
+const billStore = useBillStore();
 </script>
 <style lang="scss"></style>

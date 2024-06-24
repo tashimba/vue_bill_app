@@ -51,7 +51,7 @@ const props = defineProps({
   item: { type: Object, default: null },
 });
 
-const { getBills, changeItem, addItem } = useBillStore();
+const billStore = useBillStore();
 
 const inputName = ref(props.item?.name ?? "");
 const inputPrice = ref(props.item?.price ?? "");
@@ -59,15 +59,15 @@ const errorMessagesName = ref("");
 const errorMessagesPrice = ref("");
 
 const handleClick = (isActive) => {
-  if (checkInputValues(props.item)) {
+  if (isInputsValid(props.item)) {
     if (!!props.item) {
-      changeItem({
+      billStore.changeItem({
         id: props.item.id,
         name: inputName.value,
         price: inputPrice.value,
       });
     } else {
-      addItem({
+      billStore.addItem({
         name: inputName.value,
         price: inputPrice.value,
       });
@@ -78,7 +78,7 @@ const handleClick = (isActive) => {
   }
 };
 
-const checkInputValues = () => {
+const isInputsValid = () => {
   if (!inputName.value.length) {
     errorMessagesName.value = "Необходимо ввести имя";
     return false;
@@ -92,12 +92,12 @@ const checkInputValues = () => {
     return false;
   }
   if (!props.item) {
-    if (getBills().find((item) => item.name == inputName.value)) {
+    if (billStore.items.find((item) => item.name === inputName.value)) {
       errorMessagesName.value = "Продукт с таким именем уже создан";
       return false;
     }
   }
-  if (!Number(inputPrice.value)) {
+  if (!(+inputPrice.value)) {
     errorMessagesPrice.value = "Цена должна быть числом";
     return false;
   } else if (!inputName.value.match(/[a-zA-Zа-яёА-ЯЁ ]/)) {

@@ -5,7 +5,7 @@
       <v-list class="py-0">
         <transition-group name="list">
           <v-list-item
-            v-for="(person, i) in getPersons()"
+            v-for="(person, i) in personsStore.persons"
             :key="person.id"
             :style="i != 0 && 'border-top: 1px solid rgba(0, 0, 0, 0.2)'"
             :title="person.name"
@@ -13,7 +13,7 @@
             <template #append>
               <v-icon
                 icon="mdi-close"
-                @click="deletePerson(person.id)"
+                @click="personsStore.deletePerson(person.id)"
               ></v-icon>
             </template>
           </v-list-item>
@@ -51,7 +51,7 @@
 import { usePersonsStore } from "../stores/usePersonsStore.js";
 import { ref, watch } from "vue";
 
-const { addPerson, deletePerson, getPersons } = usePersonsStore();
+const personsStore = usePersonsStore();
 const props = defineProps({
   personId: {
     type: String,
@@ -63,7 +63,7 @@ const inputValue = ref("");
 const errorMessages = ref("");
 const createPerson = () => {
   if (checkName()) {
-    addPerson(inputValue.value);
+    personsStore.addPerson(inputValue.value);
     inputValue.value = "";
   }
 };
@@ -72,7 +72,7 @@ const checkName = () => {
     errorMessages.value = "Необходимо ввести имя";
   } else if (inputValue.value.length > 20) {
     errorMessages.value = "Длина имени не должна превышать 20 букв";
-  } else if (getPersons().find((person) => person.name == inputValue.value)) {
+  } else if (personsStore.persons.find((person) => person.name === inputValue.value)) {
     errorMessages.value = "Участник с таким именем уже создан";
   } else if (!inputValue.value.match(/[a-zA-Zа-яёА-ЯЁ ]/)) {
     errorMessages.value = "Имя должно содержать буквы";

@@ -3,7 +3,7 @@ export const getStringPrice = (price) => {
   const priceInt = Math.ceil(price);
 
   return `${priceRounded} ${
-    priceInt % 10 == 1
+    priceInt % 10 === 1
       ? "рубль"
       : priceInt % 10 >= 2 && priceInt % 10 <= 4
       ? "рубля"
