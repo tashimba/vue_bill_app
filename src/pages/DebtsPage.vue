@@ -1,69 +1,75 @@
 <template>
-  <div v-if="personStore.persons.find((person) => person.debts.length)">
-    <h1 style="text-align: center">Долги</h1>
-    <v-card
-      class="mx-auto"
-      max-width="500"
-      style="margin-bottom: 10px; padding: 0 10px"
-      v-for="person in personStore.persons.filter(
-        (person) => person.debts.length
-      )"
-      :key="person.id"
-      :title="person.name"
-      elevation="6"
-    >
-      <template v-slot:subtitle> Должен: </template>
+  <v-container>
+    <v-row v-if="billStore.hasAnySpending()">
+      <v-col>
+        <div class="">
+          <h1>Траты</h1>
+          <v-card
+            v-for="spending in billStore.getSpendingsArray()"
+            :key="spending.personId"
+            :title="personsStore.getPersonName(spending.personId)"
+            elevation="6"
+            class="mx-auto"
+            max-width="500"
+            style="margin-bottom: 10px; padding: 0 10px"
+          >
+            <template #subtitle> Потратил: </template>
 
-      <template v-slot:text>
-        <div>
-          {{ getDebtOwners(person) }}
+            <template #text>
+              <div>
+                {{ getStringPrice(spending.price) }}
+              </div>
+            </template>
+          </v-card>
         </div>
-      </template>
-    </v-card>
-  </div>
-  <h1 v-else>Долгов нет</h1>
+      </v-col>
+      <v-col>
+        <div v-if="personsStore.hasAnyDebts()">
+          <h1 style="text-align: center">Долги</h1>
+          <v-card
+            v-for="person in personsStore.getPersonsWithDebts()"
+            :key="person.id"
+            :title="person.name"
+            elevation="6"
+            class="mx-auto"
+            max-width="500"
+            style="margin-bottom: 10px; padding: 0 10px"
+          >
+            <template #subtitle> Должен: </template>
+            <template #text>
+              <div>
+                {{ getDebtOwners(person) }}
+              </div>
+            </template>
+          </v-card>
+        </div>
+        <h1 v-else>Долгов нет</h1>
+      </v-col>
+    </v-row>
+    <h1 v-else>Покупок не было</h1>
+  </v-container>
 </template>
 
-<script>
-import { useBillStore } from "../stores/useBillStore";
+<script setup>
 import { usePersonsStore } from "../stores/usePersonsStore";
+import { useBillStore } from "../stores/useBillStore";
+import { getStringPrice } from "../functions/getStringPrice";
 
-export default {
-  setup() {
-    const personStore = usePersonsStore();
-    const billStore = useBillStore();
+const personsStore = usePersonsStore();
+const billStore = useBillStore();
 
-    return {
-      personStore,
-      billStore,
-    };
-  },
-  data() {
-    return {
-      debtOwners: [],
-    };
-  },
-
-  methods: {
-    getDebtOwners(person) {
-      let debtOwners = [];
-      person.debts.forEach((debt) => {
-        this.personStore.persons.forEach((pers) => {
-          if (pers.id === debt.owner) {
-            debtOwners.push({ ownerName: pers.name, debtOwning: debt.money });
-          }
-        });
-      });
-      return debtOwners
-        .map((el) => el.ownerName + " на сумму " + el.debtOwning + " рублей")
-        .join(",\n" + "\t");
-    },
-  },
+const getDebtOwners = (person) => {
+  let debtOwners = [];
+  person.debts.forEach((debt) => {
+    personsStore.persons.forEach((pers) => {
+      if (pers.id === debt.owner) {
+        debtOwners.push({ ownerName: pers.name, debtOwning: debt.money });
+      }
+    });
+  });
+  return debtOwners
+    .map((el) => el.ownerName + " на сумму " + getStringPrice(el.debtOwning))
+    .join(",\n" + "\t");
 };
 </script>
 
-<style>
-div {
-  white-space: pre-line;
-}
-</style>

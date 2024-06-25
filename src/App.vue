@@ -1,15 +1,10 @@
 <template>
-  <Navigation />
+  <NavigationButtons />
   <RouterView></RouterView>
 </template>
 
-<script>
-import Navigation from "./components/Navigation.vue";
-export default {
-  components: {
-    Navigation,
-  },
-};
+<script setup>
+import NavigationButtons from "./components/NavigationButtons.vue";
 </script>
 
 <style>

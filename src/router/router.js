@@ -1,20 +1,20 @@
 import { createWebHistory, createRouter } from "vue-router";
-import PersonListPage from "../pages/PersonListPage.vue";
-import BillPage from "../pages/BillPage.vue";
-import DebtsPage from "../pages/DebtsPage.vue";
 
 const routes = [
   {
     path: "/",
-    component: PersonListPage,
+    name: "home",
+    component: () => import("../pages/PersonListPage.vue"),
   },
   {
     path: "/bill",
-    component: BillPage,
+    name: "bill",
+    component: () => import("../pages/BillPage.vue"),
   },
   {
     path: "/debts",
-    component: DebtsPage,
+    name: "debts",
+    component: () => import("../pages/DebtsPage.vue"),
   },
 ];
 

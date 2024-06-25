@@ -15,7 +15,7 @@ export const usePersonsStore = defineStore("persons", {
         id: Date.now(),
         debts: [],
       };
-      this.persons.unshift(newPerson);
+      this.persons.push(newPerson);
     },
     deletePerson(id) {
       const billStore = useBillStore();
@@ -34,13 +34,13 @@ export const usePersonsStore = defineStore("persons", {
     },
 
     addDebt(id, money, owner) {
-      const currentPerson = this.persons.find((person) => person.id == id);
+      const currentPerson = this.persons.find((person) => person.id === id);
       const currentPersonDebtsOwner = this.persons.find(
-        (person) => person.id == owner
+        (person) => person.id === owner
       );
 
       //если currentPerson уже должен этому же owner
-      if (currentPerson.debts.some((debt) => debt.owner == owner)) {
+      if (currentPerson.debts.some((debt) => debt.owner === owner)) {
         currentPerson.debts.map((debt) => {
           if (debt.owner === owner) {
             debt.money += money;
@@ -48,7 +48,7 @@ export const usePersonsStore = defineStore("persons", {
         });
       } else {
         this.persons
-          .find((person) => person.id == id)
+          .find((person) => person.id === id)
           .debts.push({
             money,
             owner,
@@ -81,6 +81,18 @@ export const usePersonsStore = defineStore("persons", {
           }
         });
       }
+    },
+  },
+
+  getters: {
+    hasAnyDebts: (state) => () => {
+      return state.persons.find((person) => person.debts.length);
+    },
+    getPersonsWithDebts: (state) => () => {
+      return state.persons.filter((person) => person.debts.length);
+    },
+    getPersonName: (state) => (id) => {
+      return state.persons.find((person) => person.id === id).name;
     },
   },
 });
