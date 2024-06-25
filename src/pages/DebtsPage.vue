@@ -73,4 +73,3 @@ const getDebtOwners = (person) => {
 };
 </script>
 
-<style></style>

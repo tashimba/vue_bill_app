@@ -71,4 +71,3 @@ import { getStringPrice } from "../functions/getStringPrice";
 
 const billStore = useBillStore();
 </script>
-<style lang="scss"></style>

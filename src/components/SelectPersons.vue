@@ -40,4 +40,3 @@ watch(bill, () => {
 });
 </script>
 
-<style></style>

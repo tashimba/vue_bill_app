@@ -46,4 +46,3 @@ const handleClick = (route, i) => {
 };
 </script>
 
-<style></style>

@@ -114,4 +114,3 @@ watch(inputPrice, () => {
 });
 </script>
 
-<style></style>
